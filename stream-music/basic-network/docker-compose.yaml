@@ -1,0 +1,154 @@
+version: '2'
+
+networks:
+  acorn:
+
+services:
+  orderer.acornpub.com:
+    container_name: orderer.acornpub.com
+    image: hyperledger/fabric-orderer:1.4.3
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererOrg
+      - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/msp/orderer/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
+    command: orderer
+    ports:
+      - 7050:7050
+    volumes:
+        - ./config/:/etc/hyperledger/configtx
+        - ./crypto-config/ordererOrganizations/acornpub.com/orderers/orderer.acornpub.com/:/etc/hyperledger/msp/orderer
+    networks:
+      - acorn
+  peer0.sales1.acornpub.com:
+    container_name: peer0.sales1.acornpub.com
+    image: hyperledger/fabric-peer:1.4.3
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer0.sales1.acornpub.com
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_LOCALMSPID=Sales1Org
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+      - CORE_PEER_ADDRESS=peer0.sales1.acornpub.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.sales1.acornpub.com:7051
+      - CORE_PEER_GOSSIP_ENDPOINT=peer0.sales1.acornpub.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.sales1.acornpub.com:7051
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=net_acorn
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 7051:7051
+      - 7053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/sales1.acornpub.com/peers/peer0.sales1.acornpub.com/msp:/etc/hyperledger/msp/peer
+        - ./crypto-config/peerOrganizations/sales1.acornpub.com/users:/etc/hyperledger/msp/users
+        - ./config:/etc/hyperledger/configtx
+    depends_on:
+      - orderer.acornpub.com
+    networks:
+      - acorn
+  peer1.sales1.acornpub.com:
+    container_name: peer1.sales1.acornpub.com
+    image: hyperledger/fabric-peer:1.4.3
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer1.sales1.acornpub.com
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_LOCALMSPID=Sales1Org
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+      - CORE_PEER_ADDRESS=peer1.sales1.acornpub.com:7051
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=net_acorn
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 8051:7051
+      - 8053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/sales1.acornpub.com/peers/peer1.sales1.acornpub.com/msp:/etc/hyperledger/msp/peer
+        - ./crypto-config/peerOrganizations/sales1.acornpub.com/users:/etc/hyperledger/msp/users
+        - ./config:/etc/hyperledger/configtx
+    depends_on:
+      - orderer.acornpub.com
+    networks:
+      - acorn
+  peer0.customer.acornpub.com:
+    container_name: peer0.customer.acornpub.com
+    image: hyperledger/fabric-peer:1.4.3
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer0.customer.acornpub.com
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_LOCALMSPID=CustomerOrg
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+      - CORE_PEER_ADDRESS=peer0.customer.acornpub.com:7051
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=net_acorn
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 9051:7051
+      - 9053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/customer.acornpub.com/peers/peer0.customer.acornpub.com/msp:/etc/hyperledger/msp/peer
+        - ./crypto-config/peerOrganizations/customer.acornpub.com/users:/etc/hyperledger/msp/users
+        - ./config:/etc/hyperledger/configtx
+    depends_on:
+      - orderer.acornpub.com
+    networks:
+      - acorn
+  peer1.customer.acornpub.com:
+    container_name: peer1.customer.acornpub.com
+    image: hyperledger/fabric-peer:1.4.3
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer1.customer.acornpub.com
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_LOCALMSPID=CustomerOrg
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+      - CORE_PEER_ADDRESS=peer1.customer.acornpub.com:7051
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=net_acorn
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 10051:7051
+      - 10053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/customer.acornpub.com/peers/peer1.customer.acornpub.com/msp:/etc/hyperledger/msp/peer
+        - ./crypto-config/peerOrganizations/customer.acornpub.com/users:/etc/hyperledger/msp/users
+        - ./config:/etc/hyperledger/configtx
+    depends_on:
+      - orderer.acornpub.com
+    networks:
+      - acorn
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.sales1.acornpub.com:7051
+      - CORE_PEER_LOCALMSPID=Sales1Org
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/sales1.acornpub.com/users/Admin@sales1.acornpub.com/msp
+      - CORE_CHAINCODE_KEEPALIVE=10
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./../chaincode/:/opt/gopath/src/chaincode/
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./config:/etc/hyperledger/configtx
+    networks:
+        - acorn

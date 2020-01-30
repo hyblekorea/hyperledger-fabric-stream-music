@@ -1,0 +1,60 @@
+Organizations:
+
+    - &OrdererOrg
+        Name: OrdererOrg
+        ID: OrdererOrg
+        MSPDir: crypto-config/ordererOrganizations/acornpub.com/msp
+
+    - &Sales1Org
+        Name: Sales1Org
+        ID: Sales1Org
+        MSPDir: crypto-config/peerOrganizations/sales1.acornpub.com/msp
+        AnchorPeers:
+            - Host: peer0.sales1.acornpub.com
+              Port: 7051
+
+    - &CustomerOrg
+        Name: CustomerOrg
+        ID: CustomerOrg
+        MSPDir: crypto-config/peerOrganizations/customer.acornpub.com/msp
+        AnchorPeers:
+            - Host: peer0.customer.acornpub.com
+              Port: 7051
+
+Orderer: &OrdererDefaults
+
+    OrdererType: solo
+    Addresses:
+        - orderer.acornpub.com:7050
+    BatchTimeout: 2s
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+    Kafka:
+        Brokers:
+            - 127.0.0.1:9092
+    Organizations:
+
+Application: &ApplicationDefaults
+    Organizations:
+    
+Profiles:
+
+    OrdererGenesis:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Sales1Org
+                    - *CustomerOrg
+    Channel1:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Sales1Org
+                - *CustomerOrg

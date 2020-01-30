@@ -1,0 +1,24 @@
+{
+    "name": "fabric-acorn-music",
+    "version": "1.0.0",
+    "description": "Hyperledger Fabric Acorn Music Application",
+    "main": "server.js",
+    "dependencies": {
+        "fabric-ca-client": "^1.4.0",
+        "fabric-client": "^1.4.0",
+        "fabric-network": "~1.4.0",
+        "grpc": "^1.9.1",
+        "express": "latest",
+        "body-parser": "latest",
+        "ejs": "latest",
+        "angular": "^1.4.3"
+    },
+    "license": "Apache-2.0",
+    "keywords": [
+        "Hyperledger",
+        "Fabric",
+        "Acorn",
+        "Music",
+        "Application"
+    ]
+}

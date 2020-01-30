@@ -1,0 +1,21 @@
+version: '2'
+
+networks:
+  acorn:
+
+services:
+  ca.sales1.acornpub.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.sales1.acornpub.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.sales1.acornpub.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/08d78e6ffdde14e32f9c88712c8dfef7bdd14c1c59b80e9925a1324d48ca4e83_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/sales1.acornpub.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.sales1.acornpub.com
+    networks:
+      - acorn
