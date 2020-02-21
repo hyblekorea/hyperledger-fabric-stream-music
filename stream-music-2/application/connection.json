@@ -1,0 +1,83 @@
+{
+    "name": "basic-network",
+    "version": "1.0.0",
+    "client": {
+        "organization": "Sales1",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300"
+                },
+                "orderer": "300"
+            }
+        }
+    },
+    "channels": {
+        "channelsales1": {
+            "orderers": [
+                "orderer1.acornpub.com"
+            ],
+            "peers": {
+                "peer0.sales1.acornpub.com": {}
+            }
+        }
+    },
+    "organizations": {
+        "Sales1": {
+            "mspid": "Sales1Org",
+            "peers": [
+                "peer0.sales1.acornpub.com"
+            ],
+            "certificateAuthorities": [
+                "ca.sales1.acornpub.com"
+            ],
+            "adminPrivateKey": {
+                "path":"../../basic-network/crypto-config/peerOrganizations/sales1.acornpub.com/users/Admin@sales1.acornpub.com/msp/keystore/d7de1917510ac22b88f8a9f0a827c2d80363777770cc0a94415e7721246bb7b9_sk"
+            },
+            "signedCert":{
+                "path":"../../basic-network/crypto-config/peerOrganizations/sales1.acornpub.com/users/Admin@sales1.acornpub.com/msp/signcerts/Admin@sales1.acornpub.com-cert.pem"
+            }
+        }
+    },
+    "orderers": {
+        "orderer1.acornpub.com": {
+            "url": "grpc://localhost:7050",
+            "grpcOptions":{
+                "ssl-target-name-override":"orderer1.acornpub.com",
+                "grpc-max-send-message-length": -1
+            },
+            "tlsCACerts": {
+                "path": "../../basic-network/crypto-config/ordererOrganizations/acornpub.com/orderers/orderer1.acornpub.com/msp/tlscacerts/tlsca.acornpub.com-cert.pem"
+            }
+        }
+    },
+    "peers": {
+        "peer0.sales1.acornpub.com": {
+            "url": "grpc://localhost:7051",
+            "tlsCACerts": {
+                "path": "../../basic-network/crypto-config/peerOrganizations/sales1.acornpub.com/peers/peer0.sales1.acornpub.com/msp/tlscacerts/tlsca.sales1.acornpub.com-cert.pem"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer1.sales1.acornpub.com",
+                "hostnameOverride": "peer1.sales1.acornpub.com"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.sales1.acornpub.com": {
+            "url": "http://localhost:7054",
+            "caName": "ca.sales1.acornpub.com",
+            "tlsCACerts": {
+                "path": "../../basic-network/crypto-config/peerOrganizations/sales1.acornpub.com/ca/ca.sales1.acornpub.com-cert.pem"
+            },
+            "registrar":{
+                "enrollId": "admin",
+                "enrollSecret": "adminpw",
+                "caName": "casales1"
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        }
+    }
+}

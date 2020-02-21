@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hyperledger Fabric Music Application</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+    <style type="text/css">
+      header{
+        background-color: lightgray;
+        font-size:20px;
+        padding:20px;
+      }
+      header, .form-group{
+        margin-bottom: 3%;
+      }
+      .form-group{
+        width:50%;
+      }
+      #body{
+        margin-left:3%;
+        margin-right:3%;
+      }
+      .form-control{
+        margin: 8px;
+      }
+       #right_header{
+        width:20%;
+        font-size:15px;
+        margin-right:0px;
+      }
+      #left_header{
+        margin-left:0;
+        width:40%;
+        display:inline-block;
+      } 
+      #id {
+        width:49%;
+        display: inline-block;
+      }
+      table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+      }
+      td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+      }
+      tr:nth-child(even) {
+          background-color: #dddddd;
+      }
+    </style>
+  </head>
+ <body ng-app="application" ng-controller="AppCtrl">
+    <header>
+      <div id="left_header">Hyperledger Fabric Acorn Music Application</div>
+    </header>
+    <div id="body">
+      <div class="form-group">
+          <h5 style="color:green;margin-bottom:2%" id="success_getwallet">{{search_wallet}}</h5>
+          <label>Search Wallet</label>
+          <p><input class="form-control" type="text" placeholder="Ex: 1Q2W3E4R" ng-model="walletid">
+          <input id="getWallet" type="submit" value="Search" class="btn btn-primary" ng-click="getWallet()"></p>
+      </div>
+      <div class="form-group">
+        <h5 style="color:green;margin-bottom:2%" id="success_getmusic">Success to query</h5>
+        <label>Search Music</label>
+        <p><input class="form-control" type="text" placeholder="Ex: MS1" ng-model="musickey">
+        <input id="getMusic" type="submit" value="Search" class="btn btn-primary" ng-click="getMusic()"></p>
+        <p><input id="getAllMusic" type="submit" value="Get all music" class="btn btn-primary" ng-click="getAllMusic()"></p>
+      </div>
+ <table id="allMusic" class="table" align="center">
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Singer</th>
+          <th>Price</th>
+          <th>Owner</th>
+          <th>Count</th>
+          <th>Buy</th>
+        </tr>
+        <tr ng-repeat="music in allMusic">
+          <td>{{music.Key}}</td>
+          <td>{{music.title}}</td>
+          <td>{{music.singer}}</td>
+          <td>{{music.price}}</td>
+          <td>{{music.walletid}}</td>
+          <td>{{music.count}}</td>
+          <td><input id="purchaseMusic" type="submit" value="구매" ng-click="purchaseMusic(music.Key)"></td>
+        </tr>
+        <h5 style="color:green;margin-bottom:2%" id="success_getallmusic">{{purchase_music}}</h5>
+      </table>
+ <div class="form-group">
+        <label>Create Music</label>
+        <h5 style="color:green;margin-bottom:2%" id="success_setmusic">{{create_music}}</h5>
+        <br>
+        Title: <input class="form-control" type="text" placeholder="Ex: Fabric" ng-model="music.title">
+        Singer: <input class="form-control" type="text" placeholder="Ex: Hyper" ng-model="music.singer">
+        Price: <input class="form-control" type="text" placeholder="Ex: 20" ng-model="music.price"> 
+        Owner: <input class="form-control" type="text" placeholder="Ex: 5T6Y7U8I" ng-model="music.walletid">
+        <input id="setMusic" type="submit" value="Create" class="btn btn-primary" ng-click="setMusic()"> 
+      </div>
+      <div class="form-group">
+          <label>Change Music Price</label>
+        <h5 style="color:green;margin-bottom:2%" id="success_changemusicprice">{{change_music_price}}</h5>
+        <br>
+        Key: <input class="form-control" type="text" placeholder="Ex: MS0" ng-model="change.musickey">
+        Price<input class="form-control" type="text" placeholder="Ex: 10" ng-model="change.price">
+        <input id="changeMusicPrice" type="submit" value="Change" class="btn btn-primary" ng-click="changeMusicPrice()">
+      </div>
+      <div class="form-group">
+        <label>DeleteMusic</label>
+        <h5 style="color:green;margin-bottom:2%" id="success_deletemusic">{{delete_music}}</h5>
+        <p>
+        Key: <input class="form-control" type="text" placeholder="Ex: MS0" ng-model="musickeydelete">
+        <input id="deleteMusic" type="submit" value="Delete" class="btn btn-primary" ng-click="deleteMusic()"></p>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="app.js"> </script>
+</html>

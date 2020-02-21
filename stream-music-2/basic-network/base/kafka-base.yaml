@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+
+ zookeeper:
+   image: hyperledger/fabric-zookeeper
+   environment:
+     - ZOO_SERVERS=server.1=zookeeper1.acornpub.com:2888:3888 server.2=zookeeper2.acornpub.com:2888:3888 server.3=zookeeper3.acornpub.com:2888:3888
+   restart: always
+
+ kafka:
+   image: hyperledger/fabric-kafka
+   restart: always
+   environment:
+     - KAFKA_MESSAGE_MAX_BYTES=103809024
+     - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+     - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+     - KAFKA_MIN_INSYNC_REPLICAS=2
+     - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+     - KAFKA_ZOOKEEPER_CONNECT=zookeeper1.acornpub.com:2181,zookeeper2.acornpub.com:2181,zookeeper3.acornpub.com:2181
